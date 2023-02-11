@@ -4,3 +4,13 @@ main: it.pippopad.mathplotview.MathPlotView
 api-version: 1.19
 authors: [ Pippopad ]
 description: This plugin allows to display functions on surfaces.
+
+commands:
+  mathplotview:
+    permission: 'mathplotview.admin'
+    aliases: ['mpv']
+
+permissions:
+  mathplotview.admin:
+    description: "Allows to use all the plugin commands"
+    default: op

@@ -9,7 +9,8 @@ public class CreateSubCommand extends SubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
-        return false;
+    public boolean execute(CommandSender sender, String... args) {
+        sender.sendMessage(args);
+        return true;
     }
 }
