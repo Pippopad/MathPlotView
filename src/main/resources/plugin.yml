@@ -1,0 +1,6 @@
+name: MathPlotView
+version: '${project.version}'
+main: it.pippopad.mathplotview.MathPlotView
+api-version: 1.19
+authors: [ Pippopad ]
+description: This plugin allows to display functions on surfaces.
