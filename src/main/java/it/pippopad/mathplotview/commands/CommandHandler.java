@@ -15,6 +15,7 @@ public class CommandHandler implements TabExecutor {
         commands = new HashMap<String, SubCommand>();
 
         registerSubCommand(new CreateSubCommand());
+        registerSubCommand(new ShowSubCommand());
     }
 
     @Override
