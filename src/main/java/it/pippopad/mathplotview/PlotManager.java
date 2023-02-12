@@ -27,6 +27,10 @@ public class PlotManager {
         return false;
     }
 
+    public static List<Plot> getPlots() {
+        return plots;
+    }
+
     public static Plot getPlot(String name) {
         for (Plot p : plots)
             if (p.getName() == name) return p;

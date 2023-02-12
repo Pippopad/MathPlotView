@@ -1,0 +1,10 @@
+# MathPlotView File Config
+# Author: Pippopad
+
+# These settings control the minimum size of a surface. The recommended size is 5 blocks (can't be lower)
+min-surface-width: 5
+min-surface-height: 5
+
+# These settings control the maximum size of a surface. The default value is 0 which mean no-restriction
+max-surface-width: 0
+max-surface-height: 0
