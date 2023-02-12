@@ -13,7 +13,7 @@ public class PlotManager {
 
     public static boolean addPlot(Plot plot) {
         for (Plot p : plots)
-            if (p.getName() == plot.getName()) return false;
+            if (p.getName().equalsIgnoreCase(plot.getName())) return false;
         plots.add(plot);
         return true;
     }
