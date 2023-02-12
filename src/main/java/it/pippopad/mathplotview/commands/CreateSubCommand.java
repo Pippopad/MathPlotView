@@ -98,10 +98,10 @@ public class CreateSubCommand extends SubCommand {
         String name = args[6];
         Plot p = new Plot(name, x1, y1, z1, x2, y2, z2);
 
-        if (!PlotManager.addPlot(p)) {
-            sender.sendMessage(Utils.color("&cA plot with that name already exists!"));
-        } else {
+        if (PlotManager.addPlot(p)) {
             sender.sendMessage(Utils.color("&2Created!"));
+        } else {
+            sender.sendMessage(Utils.color("&cA plot with that name already exists!"));
         }
 
         return true;

@@ -9,12 +9,13 @@ import java.util.*;
 
 public class CommandHandler implements TabExecutor {
 
-    private Map<String, SubCommand> commands;
+    private final Map<String, SubCommand> commands;
 
     public CommandHandler() {
-        commands = new HashMap<String, SubCommand>();
+        commands = new HashMap<>();
 
         registerSubCommand(new CreateSubCommand());
+        registerSubCommand(new RemoveSubCommand());
         registerSubCommand(new ShowSubCommand());
     }
 
@@ -49,7 +50,7 @@ public class CommandHandler implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         Set<SubCommand> allowed = getAllowedCommands(sender);
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
 
         if (args.length == 1) {
             if (!args[0].isEmpty()) {
@@ -72,8 +73,7 @@ public class CommandHandler implements TabExecutor {
 
                 String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
 
-                List<String> tab = sub.onTabComplete(sender, subArgs);
-                return tab;
+                return sub.onTabComplete(sender, subArgs);
             }
         }
         return output;
@@ -92,7 +92,7 @@ public class CommandHandler implements TabExecutor {
     }
 
     private Set<SubCommand> getAllowedCommands(CommandSender sender) {
-        Set<SubCommand> allowed = new HashSet<SubCommand>();
+        Set<SubCommand> allowed = new HashSet<>();
         for (SubCommand sub : commands.values()) {
             if (hasPermission(sender, sub.getPermission())) {
                 allowed.add(sub);

@@ -8,7 +8,7 @@ public class PlotManager {
     private static List<Plot> plots;
 
     public static void init() {
-        plots = new ArrayList<Plot>();
+        plots = new ArrayList<>();
     }
 
     public static boolean addPlot(Plot plot) {
@@ -20,7 +20,7 @@ public class PlotManager {
 
     public static boolean removePlot(String name) {
         for (Plot p : plots)
-            if (p.getName() == name) {
+            if (p.getName().equalsIgnoreCase(name)) {
                 plots.remove(p);
                 return true;
             }
@@ -33,7 +33,7 @@ public class PlotManager {
 
     public static Plot getPlot(String name) {
         for (Plot p : plots)
-            if (p.getName() == name) return p;
+            if (p.getName().equalsIgnoreCase(name)) return p;
         return null;
     }
 }
