@@ -1,5 +1,6 @@
 package it.pippopad.mathplotview.commands;
 
+import it.pippopad.mathplotview.Utils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -8,8 +9,17 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CreateSubCommand extends SubCommand {
+    private enum ValidateArgsResult {
+        VALID,
+        INVALID_COORDS,
+        INVALID_PLOTNAME_LENGTH,
+        INVALID_PLOTNAME_CHARACTERS,
+    }
+
     @Override
     public String getName() {
         return "create";
@@ -24,6 +34,23 @@ public class CreateSubCommand extends SubCommand {
     public boolean execute(CommandSender sender, String... args) {
         if (args.length != 7) return false;
 
+        ValidateArgsResult res = areValidArgs(args);
+        if (res != ValidateArgsResult.VALID)
+        {
+            switch (res) {
+                case INVALID_COORDS:
+                    sender.sendMessage(Utils.color("&cCoordinates must be numbers!"));
+                    break;
+                case INVALID_PLOTNAME_LENGTH:
+                    sender.sendMessage(Utils.color("&cThe plot name's length must be between 3 and 64."));
+                    break;
+                case INVALID_PLOTNAME_CHARACTERS:
+                    sender.sendMessage(Utils.color("&cInvalid name! Only letters, numbers, dash and underscore are allowed (must start with a letter)"));
+                    break;
+            }
+            return true;
+        }
+
         sender.sendMessage(args);
         return true;
     }
@@ -32,23 +59,9 @@ public class CreateSubCommand extends SubCommand {
     public List<String> onTabComplete(CommandSender sender, String... args) {
         if (!(sender instanceof Player)) return Collections.emptyList();
 
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
         Block target = ((Player) sender).getTargetBlockExact(5);
-        if (target == null) {
-            if (args.length == 1 || args.length == 4) {
-                output.add("~");
-                output.add("~ ~");
-                output.add("~ ~ ~");
-            }
-            if (args.length == 2 || args.length == 5) {
-                output.add("~ ~");
-                output.add("~ ~ ~");
-            }
-            if (args.length == 3 || args.length == 6) {
-                output.add("~");
-            }
-            return output;
-        }
+        if (target == null) return Collections.emptyList();
 
         Location targetLoc = target.getLocation();
         if (args.length < 7) {
@@ -74,5 +87,26 @@ public class CreateSubCommand extends SubCommand {
         }
 
         return output;
+    }
+
+    private ValidateArgsResult areValidArgs(String... args) {
+        // Check if coord values are numbers
+        for (int i = 0; i < 7 - 1; i++) {
+            try {
+                Integer.parseInt(args[i]);
+            } catch (Exception e) {
+                return ValidateArgsResult.INVALID_COORDS;
+            }
+        }
+
+        String name = args[6];
+        if (name.length() < 3 || name.length() > 64) return ValidateArgsResult.INVALID_PLOTNAME_LENGTH;
+
+        // Check if name is valid
+        Pattern p = Pattern.compile("^[a-z][a-z0-9-_]+$", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(name);
+        if (!m.find()) return ValidateArgsResult.INVALID_PLOTNAME_CHARACTERS;
+
+        return ValidateArgsResult.VALID;
     }
 }
