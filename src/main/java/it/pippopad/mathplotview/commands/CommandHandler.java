@@ -39,7 +39,7 @@ public class CommandHandler implements TabExecutor {
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
         boolean result = handler.execute(sender, subArgs);
         if (!result) {
-            sender.sendMessage("Invalid syntax!");
+            sender.sendMessage(Utils.color("&cUsage: /" + label + " " + handler.getUsage()));
         }
 
         return result;
@@ -47,7 +47,35 @@ public class CommandHandler implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return Collections.emptyList();
+        Set<SubCommand> allowed = getAllowedCommands(sender);
+        List<String> output = new ArrayList<String>();
+
+        if (args.length == 1) {
+            if (!args[0].isEmpty()) {
+                for (SubCommand sub : allowed) {
+                    if (sub.getName().toLowerCase().startsWith(args[0].toLowerCase(Locale.ROOT))) {
+                        output.add(sub.getName());
+                    }
+                }
+            } else {
+                for (SubCommand sub : allowed) {
+                    output.add(sub.getName());
+                }
+            }
+        } else if (args.length >= 2) {
+            if (getSubCommand(args[0]) != null) {
+                SubCommand sub = getSubCommand(args[0]);
+                if (!allowed.contains(sub)) {
+                    return output;
+                }
+
+                String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+
+                List<String> tab = sub.onTabComplete(sender, subArgs);
+                return tab;
+            }
+        }
+        return output;
     }
 
     private void registerSubCommand(SubCommand command) {
