@@ -9,6 +9,8 @@ public final class MathPlotView extends JavaPlugin {
     public void onEnable() {
         getCommand("mathplotview").setExecutor(new CommandHandler());
         getCommand("mathplotview").setTabCompleter(new CommandHandler());
+
+        PlotManager.init();
     }
 
     @Override
