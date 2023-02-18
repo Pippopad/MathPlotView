@@ -17,6 +17,7 @@ public class CommandHandler implements TabExecutor {
         registerSubCommand(new CreateSubCommand());
         registerSubCommand(new RemoveSubCommand());
         registerSubCommand(new ShowSubCommand());
+        registerSubCommand(new FuncSubCommand());
     }
 
     @Override
